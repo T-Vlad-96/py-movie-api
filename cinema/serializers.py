@@ -12,7 +12,7 @@ class MovieSerializer(serializers.Serializer):
         validators=[
             UniqueValidator(
                 queryset=Movie.objects.all(),
-                message="A movie with this title already exist"
+                message="A movie with this title already exists"
             )
         ]
     )

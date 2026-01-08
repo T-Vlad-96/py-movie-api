@@ -24,8 +24,7 @@ class MovieSerializer(serializers.Serializer):
     )
 
     def create(self, validated_data):
-        movie = Movie.objects.create(**validated_data)
-        return movie
+        return Movie.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get("title", instance.title)

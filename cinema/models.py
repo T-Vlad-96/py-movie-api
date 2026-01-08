@@ -10,4 +10,4 @@ class Movie(models.Model):
         verbose_name_plural = "movies"
 
     def __str__(self):
-        return f"Movie: {self.title} (duration: {self.duration} minutes"
+        return f"Movie: {self.title} (duration: {self.duration} minutes)"

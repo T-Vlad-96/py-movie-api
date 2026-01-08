@@ -1,5 +1,39 @@
-from rest_framework.serializers import Serializer
+from django.core.validators import MinValueValidator
+from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
+
+from cinema.models import Movie
 
 
-class MovieSerializer(Serializer):
-    pass
+class MovieSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(
+        max_length=255,
+        validators=[
+            UniqueValidator(
+                queryset=Movie.objects.all(),
+                message="A movie with this title already exist"
+            )
+        ]
+    )
+    description = serializers.CharField()
+    duration = serializers.IntegerField(
+        validators=[
+            MinValueValidator(1)
+        ]
+    )
+
+    def create(self, validated_data):
+        movie = Movie.objects.create(**validated_data)
+        return movie
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get("title", instance.title)
+        instance.description = validated_data.get(
+            "description", instance.description
+        )
+        instance.duration = validated_data.get(
+            "duration", instance.duration
+        )
+        instance.save()
+        return instance
